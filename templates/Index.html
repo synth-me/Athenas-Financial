@@ -1,21 +1,101 @@
-<html>
-  
-  
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Chart.js demo</title>
+        <!-- import plugin script -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
     
-  </head>
-  
-  <body>
-  
-  <form method="get">
-  <input type="text" name="nome_da_empresa">  
-    <input type="submit">
-  </form>
+    <style>
+      
+      .in{
+        border-radius:25px;
+      }
+      
+      
+    </style>
+    </head>
     
-  <p>{{stock_info}}</p>
-  <p>{{sent_info}}</p>
-  
-  </body>
-  
-  
+    <body>
+    
+    <form method='get'>
+    
+    <h1>Athenas Financial</h1>
+    <img src="">
+    <p>Input the company name</p>
+    <input class="in" type="text" name="nome_da_empresa">
+    <p>Input the research’s range(days)</p>
+    <input class="in" type="tex" name="day">
+    <input class="in" type="submit">
+    
+    <p>informacoes sobre acoes</p>
+    <p>{{stock_info|safe}}</p>
+    
+    <p>Informacoes sobre os sentimentos</p>
+    <p>{{sent_info|safe}}</p>
+    
+    
+    <canvas id="noticias"></canvas>
+    
+    <canvas id="subjetividade"></canvas>
+    
+    <canvas id="acoes"></canvas>
+    
+    </form>
+    
+    <script>
+                labels : ["Noticia_1","Noticia_2","Noticia_3","Noticia_n","Noticia_n","Noticia_n"],
+                datasets : [
+                {
+                    fillColor : "rgba(172,194,132,0.4)",
+                    strokeColor : "#ACC26D",
+                    pointColor : "#fff",
+                    pointStrokeColor : "#9DB86D",
+                    data : [203,156,99,251,305,247]
+                }
+            ]
+            }
+            // get line chart canvas
+            var buyers = document.getElementById('noticias').getContext('2d');
+            // draw line chart
+            new Chart(buyers).Line(buyerData);
+          
+            var buyerData = {
+                labels : ["Noticia_1","Noticia_2","Noticia_3","Noticia_n","Noticia_n","Noticia_n"],
+                datasets : [
+                {
+                    fillColor : "rgba(142,144,132,0.4)",
+                    strokeColor : "#ACC26D",
+                    pointColor : "#fff",
+                    pointStrokeColor : "#9DB86D",
+                    data : [203,156,99,251,305,247]
+                }
+            ]
+            }
+            // get line chart canvas
+            var buyers = document.getElementById('subjetividade').getContext('2d');
+            // draw line chart
+            new Chart(buyers).Line(buyerData);
+            
+            var buyerData = {
+                labels : ["dia 1","dia 2","dia 3","dia n","dia n","dia n"],
+                datasets : [
+                {
+                    fillColor : "rgba(194,164,112,0.4)",
+                    strokeColor : "#ACC26D",
+                    pointColor : "#fff",
+                    pointStrokeColor : "#9DB86D",
+                    data : [203,156,99,251,305,247]
+                }
+            ]
+            }
+            // get line chart canvas
+            var buyers = document.getElementById('acoes').getContext('2d');
+            // draw line chart
+            new Chart(buyers).Line(buyerData);
+        
+        
+        </script>
+        </form>
+    </body>
 </html>

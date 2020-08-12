@@ -22,7 +22,7 @@ class search():
     database = data_c.set_index("Name")
     return database
     
-  def company_search(company,range=1):
+  def company_search(company,range):
     
     total_values = []
     
@@ -64,7 +64,7 @@ class search():
     
     #s = SequenceMatcher(None,company,company_target).ratio()
 
-  def company_values(company,database,range=1):
+  def company_values(company,database,range):
     
     a = search.similarity(company,database)
     b = search.company_search(a[1],range)

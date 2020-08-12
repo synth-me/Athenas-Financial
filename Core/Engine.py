@@ -1,6 +1,6 @@
 # aqui vao os arquivos relativos a analise
 # das noticias 
-
+from googletrans import Translator 
 import nltk
 from nltk.corpus import wordnet as wn
 from nltk.corpus import floresta 
@@ -65,7 +65,7 @@ class cluster_steps():
     return text_filtered
   
   def domain(text):
-    
+    translator = Translator()
     #nltk.download('all')
     
     stop_detected = []
@@ -73,11 +73,11 @@ class cluster_steps():
     information_text = []
     
     text_filtered = cluster_steps.stopwords_spot(text)
+    for word in text_filtered:
       
-    wok_word = word_tokenize(" ".join(text_filtered))
-    n = nltk.pos_tag(wok_word)
+      n = nltk.tag.pos_tag([translator.translate(word).text])
+      information_text.append(n)
       
-    information_text.append(n)  
     return information_text
     
   def classification(information_text):
@@ -120,12 +120,14 @@ class cluster_steps():
   def sentiment_analysis_0(noun_verbs):
     
     sentiment_dict = {}
-    
     for word in noun_verbs:
+      try:
+        word_t = TextBlob(word)
+        w = word_t.sentiment
+        sentiment_dict[word] = (w.polarity,w.subjectivity)
+      except:
+        sentiment_dict[word] = (0.0,0.0)
       
-      word_t = TextBlob(word)
-      w = word_t.sentiment
-      sentiment_dict[word] = (w.polarity,w.subjectivity)  
     return sentiment_dict 
   
   def sentiment_analysis_1(noun_verbs):
@@ -167,8 +169,8 @@ class cluster_steps():
       weight_sub_value.append(processed_data[v_words][1])
       weight_pol_value.append(processed_data[v_words][0])
     
-    final_pol = sum(weight_sub_value)/len(weight_sub_value)
-    final_sub = sum(weight_pol_value)/len(weight_pol_value)
+    final_pol = sum(weight_sub_value)/(1+len(weight_sub_value))
+    final_sub = sum(weight_pol_value)/(1+len(weight_pol_value))
     
     for values_pol in weight_pol_value:
       desv_pol = final_pol - values_pol 
@@ -177,7 +179,7 @@ class cluster_steps():
       else:
         desv_pol_list.append(desv_pol*-1)
     
-    trust_pol = sum(desv_pol_list)/len(desv_pol_list)
+    trust_pol = sum(desv_pol_list)/(1+len(desv_pol_list))
     
     for values_sub in weight_sub_value:
       desv_sub = final_sub - values_sub 
@@ -186,9 +188,9 @@ class cluster_steps():
       else:
         desv_sub_list.append(desv_sub*-1)
     
-    trust_sub = sum(desv_sub_list)/len(desv_sub_list)
+    trust_sub = sum(desv_sub_list)/(1+len(desv_sub_list))
     
-    return {"Final polarity":(final_pol,trust_pol),"Final subjectivity":(final_sub,trust_sub)}
+    return {"Final polarity":(round(final_pol,2),round(trust_pol,2)),"Final subjectivity":(round(final_sub,2),round(trust_sub,2))}
   
   
   def compiled_functions(text_use,sent=0):
